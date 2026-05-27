@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Las Colecciones de Autos Más Grandes del Mundo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #C0111F;
+    --red2: #8B0000;
+    --gold: #B8960C;
+    --gold2: #D4AF37;
+    --black: #080808;
+    --dark: #0F0F0F;
+    --dark2: #171717;
+    --dark3: #1F1F1F;
+    --white: #EFEFEF;
+    --gray: #777;
+    --gray2: #444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow Condensed', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ===== BRUSH BG ===== */
+  .brush-fixed {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .brush-fixed svg { width: 100%; height: 100%; }
+
+  /* ===== HEADER ===== */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(192,17,31,0.25);
+  }
+
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 5px;
+    color: var(--white);
+  }
+  .logo-text span { color: var(--red); }
+
+  nav { display: flex; gap: 32px; }
+  nav a {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  nav a:hover { color: var(--gold2); }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    z-index: 5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 50%, rgba(192,17,31,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 100% 60% at 30% 80%, rgba(139,0,0,0.1) 0%, transparent 60%);
+    z-index: -1;
+  }
+
+  .hero-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+    color: var(--red);
+    margin-bottom: 18px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 13vw, 10rem);
+    line-height: 0.9;
+    letter-spacing: 3px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .hero-title .line2 { color: var(--red); }
+  .hero-title .line3 { font-size: 55%; letter-spacing: 8px; color: var(--gold2); }
+
+  .hero-sub {
+    font-size: clamp(0.95rem, 2vw, 1.2rem);
+    font-weight: 400;
+    color: rgba(239,239,239,0.6);
+    max-width: 540px;
+    line-height: 1.7;
+    margin: 24px 0 50px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  /* winner card on hero */
+  .winner-hero-card {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 28px 40px;
+    background: rgba(192,17,31,0.08);
+    border: 1px solid rgba(192,17,31,0.35);
+    max-width: 680px;
+    animation: fadeUp 0.8s 0.3s ease both;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+  }
+
+  .winner-icon {
+    font-size: 3.5rem;
+    flex-shrink: 0;
+  }
+
+  .winner-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    color: var(--gold2);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .winner-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .winner-detail {
+    font-size: 1rem;
+    color: rgba(239,239,239,0.6);
+    font-weight: 500;
+  }
+
+  .winner-stat {
+    text-align: right;
+  }
+
+  .winner-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--red);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  .winner-stat-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+
+  /* ===== RANKING SECTION ===== */
+  .section {
+    position: relative;
+    z-index: 5;
+    padding: 100px 60px;
+  }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 5px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .section-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: 3px;
+    margin-bottom: 60px;
+  }
+
+  .section-heading .accent { color: var(--gold2); }
+
+  /* ===== RANKING CARDS ===== */
+  .ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .rank-card {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: start;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 40px 0;
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .rank-card:first-child { border-top: 1px solid rgba(255,255,255,0.06); }
+
+  .rank-card:hover {
+    background: rgba(192,17,31,0.04);
+    padding-left: 16px;
+    padding-right: 16px;
+    margin: 0 -16px;
+  }
+
+  .rank-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    line-height: 1;
+    padding-top: 4px;
+  }
+
+  .rank-num.gold { color: var(--gold2); }
+  .rank-num.silver { color: #B0B8C4; }
+  .rank-num.bronze { color: #CD7F32; }
+  .rank-num.other { color: var(--gray2); }
+
+  .rank-body { padding: 0 40px 0 0; }
+
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .rank-badge-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    padding: 4px 12px;
+    background: rgba(192,17,31,0.15);
+    border: 1px solid rgba(192,17,31,0.3);
+    color: var(--red);
+    text-transform: uppercase;
+  }
+
+  .rank-badge-tag.gold-tag {
+    background: rgba(184,150,12,0.12);
+    border-color: rgba(212,175,55,0.35);
+    color: var(--gold2);
+  }
+
+  .rank-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .rank-person {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(239,239,239,0.7);
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+
+  .rank-desc {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(239,239,239,0.5);
+    line-height: 1.65;
+    max-width: 580px;
+  }
+
+  .rank-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .highlight-pill {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(239,239,239,0.7);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .rank-stats {
+    text-align: right;
+    flex-shrink: 0;
+    min-width: 180px;
+    padding-left: 20px;
+  }
+
+  .stat-block { margin-bottom: 24px; }
+  .stat-block:last-child { margin-bottom: 0; }
+
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem;
+    line-height: 1;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+
+  .stat-val.red { color: var(--red); }
+  .stat-val.gold { color: var(--gold2); }
+
+  .stat-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+
+  /* ===== TIMELINE / GUINNESS ===== */
+  .guinness-section {
+    position: relative;
+    z-index: 5;
+    padding: 80px 60px;
+    background: rgba(192,17,31,0.04);
+    border-top: 1px solid rgba(192,17,31,0.15);
+    border-bottom: 1px solid rgba(192,17,31,0.15);
+  }
+
+  .records-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.05);
+    margin-top: 50px;
+  }
+
+  .record-card {
+    background: var(--dark);
+    padding: 36px 30px;
+    transition: background 0.3s;
+  }
+
+  .record-card:hover { background: rgba(192,17,31,0.06); }
+
+  .record-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: var(--red);
+    line-height: 1;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .record-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .record-desc {
+    font-size: 0.95rem;
+    color: rgba(239,239,239,0.55);
+    line-height: 1.6;
+  }
+
+  /* ===== COMPARISON BAR CHART ===== */
+  .chart-section {
+    position: relative;
+    z-index: 5;
+    padding: 100px 60px;
+  }
+
+  .chart-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 50px;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 80px;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .bar-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: rgba(239,239,239,0.8);
+    text-align: right;
+  }
+
+  .bar-track {
+    height: 32px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--red2), var(--red));
+    transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative;
+  }
+
+  .bar-fill.gold-fill {
+    background: linear-gradient(to right, #7A6300, var(--gold2));
+  }
+
+  .bar-fill.top-fill {
+    background: linear-gradient(to right, #8B0000, #FF1F1F);
+  }
+
+  .bar-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: var(--white);
+    text-align: left;
+  }
+
+  /* ===== FACT CALLOUT ===== */
+  .fact-section {
+    position: relative;
+    z-index: 5;
+    padding: 80px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .fact-quote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+
+  .fact-quote em { color: var(--red); font-style: normal; }
+
+  .fact-source {
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+
+  .fact-points {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .fact-point {
+    display: flex;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .fact-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--red);
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+
+  .fact-text {
+    font-size: 1rem;
+    color: rgba(239,239,239,0.65);
+    line-height: 1.65;
+  }
+
+  .fact-text strong { color: var(--white); font-weight: 600; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    position: relative;
+    z-index: 5;
+    padding: 60px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+  }
+
+  .footer-logo span { color: var(--red); }
+
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: var(--gray);
+    text-transform: uppercase;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scaleIn {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    header { padding: 0 20px; }
+    nav { display: none; }
+    .section, .chart-section, .fact-section, .guinness-section { padding: 60px 20px; }
+    .rank-card { grid-template-columns: 50px 1fr; grid-template-rows: auto auto; }
+    .rank-num { font-size: 2.5rem; }
+    .rank-stats { text-align: left; grid-column: 1 / -1; padding-left: 0; display: flex; gap: 30px; }
+    .records-grid { grid-template-columns: 1fr; }
+    .bar-row { grid-template-columns: 130px 1fr 60px; }
+    .fact-section { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 40px 20px; }
+    .winner-hero-card { flex-direction: column; text-align: center; }
+    .winner-stat { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Fixed diagonal brush BG -->
+<div class="brush-fixed">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <path d="M-200,180 Q300,80 700,160 Q1100,240 1500,120" stroke="#C0111F" stroke-width="180" fill="none" stroke-linecap="round" opacity="0.055"/>
+    <path d="M-200,480 Q400,380 800,450 Q1100,510 1600,380" stroke="#8B0000" stroke-width="120" fill="none" stroke-linecap="round" opacity="0.05"/>
+    <path d="M-100,760 Q300,680 650,730 Q1000,780 1400,660" stroke="#C0111F" stroke-width="140" fill="none" stroke-linecap="round" opacity="0.04"/>
+    <path d="M250,0 Q350,250 300,500 Q260,750 380,900" stroke="#B8960C" stroke-width="60" fill="none" stroke-linecap="round" opacity="0.04"/>
+    <path d="M1100,50 Q1050,300 1120,550 Q1200,750 1080,900" stroke="#C0111F" stroke-width="50" fill="none" stroke-linecap="round" opacity="0.035"/>
+  </svg>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-text">AUTO<span>LEGADO</span></div>
+  <nav>
+    <a href="#ranking">Ranking</a>
+    <a href="#records">Récords</a>
+    <a href="#comparativa">Comparativa</a>
+    <a href="#datos">Datos</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-year">EDICIÓN ESPECIAL · 2025 · GUINNESS WORLD RECORDS</div>
+  <h1 class="hero-title">
+    LAS COLECCIONES<br>
+    <span class="line2">MÁS GRANDES</span><br>
+    <span class="line3">DE LA HISTORIA</span>
+  </h1>
+  <p class="hero-sub">Desde sultanes hasta comediantes, estas son las flotas de vehículos más impresionantes jamás reunidas por seres humanos en toda la historia.</p>
+
+  <div class="winner-hero-card">
+    <div class="winner-icon">👑</div>
+    <div style="flex: 1;">
+      <div class="winner-label">🏆 Poseedor del Récord Mundial</div>
+      <div class="winner-name">Sultán Hassanal Bolkiah</div>
+      <div class="winner-detail">Sultán de Brunéi · Desde 1967</div>
+    </div>
+    <div class="winner-stat">
+      <div class="winner-stat-num">+7,000</div>
+      <div class="winner-stat-label">Vehículos en total</div>
+      <div class="winner-stat-num" style="font-size: 1.5rem; color: var(--gold2); margin-top: 8px;">$5 MIL MDD</div>
+      <div class="winner-stat-label">Valor estimado</div>
+    </div>
+  </div>
+</section>
+
+<!-- RANKING -->
+<section class="section" id="ranking">
+  <div class="section-eyebrow">Top coleccionistas del mundo</div>
+  <h2 class="section-heading">EL RANKING <span class="accent">DEFINITIVO</span></h2>
+
+  <div class="ranking-list">
+
+    <!-- #1 Sultan of Brunei -->
+    <div class="rank-card">
+      <div class="rank-num gold">#1</div>
+      <div class="rank-body">
+        <div class="rank-badge">
+          <span class="rank-badge-tag gold-tag">🏆 RÉCORD GUINNESS</span>
+          <span class="rank-badge-tag">Brunéi</span>
+        </div>
+        <div class="rank-name">SULTÁN HASSANAL BOLKIAH</div>
+        <div class="rank-person">Sultán del Sultanato de Brunéi · Monarca desde 1967</div>
+        <div class="rank-desc">El poseedor de la colección privada de automóviles más grande del mundo, con más de 7,000 vehículos valuados en aproximadamente 5,000 millones de dólares. Su flota incluye 452 Ferraris, más de 500 Rolls-Royce (récord Guinness oficial), centenares de Lamborghinis, McLarens, Porsche, Bentley y Maybachs. En la década de 1990, su familia adquirió casi la mitad de todos los vehículos de lujo vendidos en el mundo. Posee uno de los pocos Bentley Dominator existentes — el primer SUV fabricado por Bentley en 1994, construido exclusivamente para él.</div>
+        <div class="rank-highlights">
+          <span class="highlight-pill">452 Ferraris</span>
+          <span class="highlight-pill">+500 Rolls-Royce</span>
+          <span class="highlight-pill">Bentley Dominator único</span>
+          <span class="highlight-pill">Rolls-Royce con techo de oro</span>
+          <span class="highlight-pill">McLarens F1</span>
+          <span class="highlight-pill">Lamborghinis</span>
+        </div>
+      </div>
+      <div class="rank-stats">
+        <div class="stat-block">
+          <div class="stat-val top-fill" style="color: #FF4444;">+7,000</div>
+          <div class="stat-key">Vehículos</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val gold">$5,000M</div>
+          <div class="stat-key">Valor USD</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val" style="font-size: 1.4rem;">$30,000M</div>
+          <div class="stat-key">Patrimonio personal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #2 Sheikh Hamad -->
+    <div class="rank-card">
+      <div class="rank-num silver">#2</div>
+      <div class="rank-body">
+        <div class="rank-badge">
+          <span class="rank-badge-tag gold-tag">🏆 Récord 4x4</span>
+          <span class="rank-badge-tag">Emiratos Árabes</span>
+        </div>
+        <div class="rank-name">SHEIKH HAMAD BIN HAMDAN AL NAHYAN</div>
+        <div class="rank-person">"El Sheikh Arcoíris" · Realeza de Abu Dabi</div>
+        <div class="rank-desc">Conocido mundialmente como el "Sheikh Arcoíris" tras pedir a Mercedes que le fabricara siete S-Class en los siete colores del arcoíris como regalo de bodas en los años 90. Su colección de más de 3,000 vehículos — repartida en cinco museos en Abu Dabi y Marruecos — tiene un valor mínimo de 160 millones de dólares. Posee el Récord Guinness por la mayor colección de vehículos 4x4 del mundo (718 unidades). Su Hummer H1 personalizado mide 6 metros de altura, pesa 60,000 kg y contiene cocina, baño y sala de lujo. También tiene la camioneta más grande del mundo: una Dodge Power Wagon de los años 50 con llantas de plataforma petrolera.</div>
+        <div class="rank-highlights">
+          <span class="highlight-pill">Hummer H1 gigante (6m)</span>
+          <span class="highlight-pill">7 Mercedes arcoíris</span>
+          <span class="highlight-pill">718 vehículos 4x4</span>
+          <span class="highlight-pill">Dodge Power Wagon gigante</span>
+          <span class="highlight-pill">5 museos privados</span>
+        </div>
+      </div>
+      <div class="rank-stats">
+        <div class="stat-block">
+          <div class="stat-val red">+3,000</div>
+          <div class="stat-key">Vehículos</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val">$160M+</div>
+          <div class="stat-key">Valor estimado</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val" style="font-size: 1.4rem;">$20,000M</div>
+          <div class="stat-key">Patrimonio personal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #3 Harold LeMay -->
+    <div class="rank-card">
+      <div class="rank-num bronze">#3</div>
+      <div class="rank-body">
+        <div class="rank-badge">
+          <span class="rank-badge-tag gold-tag">🏆 Récord privado EUA</span>
+          <span class="rank-badge-tag">Estados Unidos</span>
+        </div>
+        <div class="rank-name">HAROLD & NANCY LeMAY</div>
+        <div class="rank-person">Empresario estadounidense · Tacoma, Washington</div>
+        <div class="rank-desc">Harold LeMay, empresario de manejo de residuos, acumuló la colección privada de automóviles más grande de Estados Unidos: más de 3,000 vehículos que cubrían prácticamente toda la historia del automóvil americano. Su colección incluía autos de todas las eras, desde carruajes a vapor hasta modernos musculares americanos. Tras su muerte, la familia donó la colección al LeMay — America's Car Museum en Tacoma, Washington, que hoy exhibe más de 350 de estos vehículos y fue reconocido como el museo de automóviles más importante de Norteamérica.</div>
+        <div class="rank-highlights">
+          <span class="highlight-pill">Toda era automotriz EUA</span>
+          <span class="highlight-pill">Donado a museo público</span>
+          <span class="highlight-pill">Autos de vapor incluidos</span>
+          <span class="highlight-pill">Tacoma, WA</span>
+        </div>
+      </div>
+      <div class="rank-stats">
+        <div class="stat-block">
+          <div class="stat-val red">+3,000</div>
+          <div class="stat-key">Vehículos</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val">Museo</div>
+          <div class="stat-key">Destino final</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #4 Ralph Lauren -->
+    <div class="rank-card">
+      <div class="rank-num other">#4</div>
+      <div class="rank-body">
+        <div class="rank-badge">
+          <span class="rank-badge-tag">La más valiosa per cápita</span>
+          <span class="rank-badge-tag">Estados Unidos</span>
+        </div>
+        <div class="rank-name">RALPH LAUREN</div>
+        <div class="rank-person">Diseñador de moda · Nueva York</div>
+        <div class="rank-desc">El diseñador de moda más icónico de América posee lo que muchos consideran la colección privada de automóviles más valiosa por unidad en el mundo. Con cerca de 80 vehículos en su garaje privado en Bedford, Nueva York, su colección fue tasada en aproximadamente 600 millones de dólares en 2024. Destaca el Bugatti 57 SC Atlantic de 1938, uno de los cuatro existentes en el mundo, valuado individualmente en más de 40 millones de dólares. También posee la Ferrari 250 GTO de 1962, considerada el automóvil más valioso del mundo, y más de 15 Ferraris de la serie 250.</div>
+        <div class="rank-highlights">
+          <span class="highlight-pill">Bugatti 57 SC Atlantic ~$40M</span>
+          <span class="highlight-pill">Ferrari 250 GTO 1962</span>
+          <span class="highlight-pill">+15 Ferraris Serie 250</span>
+          <span class="highlight-pill">Porsche 550 Spyder 1955</span>
+          <span class="highlight-pill">Jaguar XKD 1955</span>
+        </div>
+      </div>
+      <div class="rank-stats">
+        <div class="stat-block">
+          <div class="stat-val red">~80</div>
+          <div class="stat-key">Vehículos</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val gold">$600M</div>
+          <div class="stat-key">Valor total</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #5 Jay Leno -->
+    <div class="rank-card">
+      <div class="rank-num other">#5</div>
+      <div class="rank-body">
+        <div class="rank-badge">
+          <span class="rank-badge-tag">Mayor colección de celebridad EUA</span>
+          <span class="rank-badge-tag">California</span>
+        </div>
+        <div class="rank-name">JAY LENO</div>
+        <div class="rank-person">Comediante y conductor · Big Dog Garage, Burbank, CA</div>
+        <div class="rank-desc">El expresentador del programa The Tonight Show es el mayor coleccionista de automóviles entre las celebridades de EUA. Su "Big Dog Garage" cerca del aeropuerto de Burbank alberga más de 180 autos y 160 motocicletas, valuados entre 80 y 100 millones de dólares. Su colección va desde la 1918 Pierce Arrow Model 66 hasta supercars modernos como el McLaren F1 (valuado en 20 millones). Jay Leno jamás ha vendido un automóvil que haya comprado, y personalmente saca a rodar cada vehículo de forma periódica para mantenerlos en perfectas condiciones.</div>
+        <div class="rank-highlights">
+          <span class="highlight-pill">McLaren F1 · $20M</span>
+          <span class="highlight-pill">1957 Mercedes 300SL</span>
+          <span class="highlight-pill">+160 motocicletas</span>
+          <span class="highlight-pill">1918 Pierce Arrow</span>
+          <span class="highlight-pill">Lamborghini Miura</span>
+        </div>
+      </div>
+      <div class="rank-stats">
+        <div class="stat-block">
+          <div class="stat-val red">180+</div>
+          <div class="stat-key">Automóviles</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val">$100M</div>
+          <div class="stat-key">Valor estimado</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #6 Jerry Seinfeld -->
+    <div class="rank-card">
+      <div class="rank-num other">#6</div>
+      <div class="rank-body">
+        <div class="rank-badge">
+          <span class="rank-badge-tag">Mayor colección Porsche del mundo</span>
+          <span class="rank-badge-tag">Nueva York</span>
+        </div>
+        <div class="rank-name">JERRY SEINFELD</div>
+        <div class="rank-person">Comediante · Nueva York</div>
+        <div class="rank-desc">El creador de Seinfeld convirtió su pasión por Porsche en una de las colecciones más significativas de esa marca en manos privadas. En 1999 compró un edificio en Manhattan por un millón de dólares y lo convirtió en un garaje de tres pisos con ascensor, sala club y área de 850 m². Posee más de 150 vehículos, con aproximadamente 43 Porsche. Su pieza más valiosa es el Porsche 917K de 1969 en librea Gulf — el mismo utilizado en la película Le Mans (1971) con Steve McQueen — valuado en 25 millones de dólares. En 2016 vendió 18 Porsche en subasta por 22 millones.</div>
+        <div class="rank-highlights">
+          <span class="highlight-pill">Porsche 917K · $25M</span>
+          <span class="highlight-pill">~43 Porsches</span>
+          <span class="highlight-pill">1955 Porsche 550 Spyder</span>
+          <span class="highlight-pill">Garaje en Manhattan</span>
+          <span class="highlight-pill">1949 Porsche 356/2</span>
+        </div>
+      </div>
+      <div class="rank-stats">
+        <div class="stat-block">
+          <div class="stat-val red">150+</div>
+          <div class="stat-key">Vehículos</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val">$100M</div>
+          <div class="stat-key">Valor estimado</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RÉCORDS GUINNESS -->
+<section class="guinness-section" id="records">
+  <div class="section-eyebrow">Récords oficiales</div>
+  <h2 class="section-heading">GUINNESS <span class="accent">WORLD RECORDS</span></h2>
+
+  <div class="records-grid">
+    <div class="record-card">
+      <div class="record-num">+500</div>
+      <div class="record-label">Rolls-Royce privados</div>
+      <div class="record-desc">El Sultán de Brunéi posee el récord oficial Guinness por la mayor colección privada de automóviles Rolls-Royce del mundo, con más de 500 unidades (algunas fuentes elevan la cifra a 600).</div>
+    </div>
+    <div class="record-card">
+      <div class="record-num">718</div>
+      <div class="record-label">Vehículos 4x4 (Sheikh Hamad)</div>
+      <div class="record-desc">El Sheikh Arcoíris detenta el récord Guinness por la mayor colección de vehículos 4x4 del mundo. Incluye el Hummer H1 más grande jamás construido, con 6 metros de altura y cocina interior.</div>
+    </div>
+    <div class="record-card">
+      <div class="record-num">37,777</div>
+      <div class="record-label">Autos a escala (Nabil Karam)</div>
+      <div class="record-desc">El libanés Nabil Karam posee el Récord Guinness por la mayor colección de autos a escala del mundo, con 37,777 piezas únicas verificadas en Zouk Mosbeh, Líbano, en junio de 2016.</div>
+    </div>
+    <div class="record-card">
+      <div class="record-num">$5,000M</div>
+      <div class="record-label">Valor total · Sultán de Brunéi</div>
+      <div class="record-desc">La colección del Sultán es la más valiosa del mundo en términos totales. En los años 90, la familia real adquiría casi el 50% de todos los vehículos de lujo vendidos globalmente cada año.</div>
+    </div>
+    <div class="record-card">
+      <div class="record-num">$600M</div>
+      <div class="record-label">Valor por unidad · Ralph Lauren</div>
+      <div class="record-desc">Con solo ~80 automóviles, la colección de Ralph Lauren es proporcionalmente la más valiosa del mundo: un promedio de 7.5 millones de dólares por vehículo. Incluye piezas irremplazables a cualquier precio.</div>
+    </div>
+    <div class="record-card">
+      <div class="record-num">2,000+</div>
+      <div class="record-label">Mayor colección privada EUA (LeMay)</div>
+      <div class="record-desc">Harold LeMay estableció el récord de la World Record Academy por la mayor colección privada de automóviles en Estados Unidos antes de que su familia la donara al museo público en Tacoma, Washington.</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARATIVA VISUAL -->
+<section class="chart-section" id="comparativa">
+  <div class="section-eyebrow">Visualización comparativa</div>
+  <h2 class="section-heading">TAMAÑO DE <span class="accent">COLECCIONES</span></h2>
+
+  <div class="chart-bars" id="bars">
+    <div class="bar-row">
+      <div class="bar-label">Sultán de Brunéi</div>
+      <div class="bar-track"><div class="bar-fill top-fill" style="width: 0%" data-width="100%"></div></div>
+      <div class="bar-value">7,000+</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Sheikh Hamad</div>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%" data-width="43%"></div></div>
+      <div class="bar-value">3,000+</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Harold LeMay</div>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%" data-width="43%"></div></div>
+      <div class="bar-value">3,000+</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Jerry Seinfeld</div>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%" data-width="2.2%"></div></div>
+      <div class="bar-value">150+</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Jay Leno</div>
+      <div class="bar-track"><div class="bar-fill" style="width: 0%" data-width="2.6%"></div></div>
+      <div class="bar-value">180+</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">Ralph Lauren</div>
+      <div class="bar-track"><div class="bar-fill gold-fill" style="width: 0%" data-width="1.2%"></div></div>
+      <div class="bar-value">~80</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.06);">
+    <div class="section-eyebrow" style="margin-bottom: 10px;">Por valor estimado</div>
+    <div class="chart-bars">
+      <div class="bar-row">
+        <div class="bar-label">Sultán de Brunéi</div>
+        <div class="bar-track"><div class="bar-fill top-fill" style="width: 0%" data-width="100%"></div></div>
+        <div class="bar-value">$5,000M</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Ralph Lauren</div>
+        <div class="bar-track"><div class="bar-fill gold-fill" style="width: 0%" data-width="12%"></div></div>
+        <div class="bar-value">$600M</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Sheikh Hamad</div>
+        <div class="bar-track"><div class="bar-fill" style="width: 0%" data-width="3.2%"></div></div>
+        <div class="bar-value">$160M+</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Jerry Seinfeld</div>
+        <div class="bar-track"><div class="bar-fill" style="width: 0%" data-width="2%"></div></div>
+        <div class="bar-value">$100M</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Jay Leno</div>
+        <div class="bar-track"><div class="bar-fill" style="width: 0%" data-width="2%"></div></div>
+        <div class="bar-value">$100M</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATOS CURIOSOS -->
+<section class="fact-section" id="datos">
+  <div>
+    <div class="fact-quote">
+      "La familia real de Brunéi compró casi el <em>50% de todos los autos de lujo</em> vendidos en el mundo durante los años 90."
+    </div>
+    <div class="fact-source">— Fuentes: Guinness World Records · Spear's WMS · Fox News</div>
+  </div>
+
+  <div class="fact-points">
+    <div class="fact-point">
+      <div class="fact-dot"></div>
+      <div class="fact-text"><strong>El Sultán tiene un Rolls-Royce de oro.</strong> Una de sus piezas más espectaculares es un Rolls-Royce descapotable con paraguas en el techo y recubrimiento exterior en oro macizo, encargado especialmente para él.</div>
+    </div>
+    <div class="fact-point">
+      <div class="fact-dot"></div>
+      <div class="fact-text"><strong>Ralph Lauren guarda autos en Bedford, NY.</strong> Su garaje privado es tan selecto que el promedio de valor por auto supera los 7 millones de dólares, incluyendo piezas irremplazables a cualquier precio.</div>
+    </div>
+    <div class="fact-point">
+      <div class="fact-dot"></div>
+      <div class="fact-text"><strong>Jay Leno nunca vende.</strong> Solo se ha deshecho de dos vehículos en toda su vida: su primer camión Ford y un Tesla Model S Plaid en 2021. Él mismo saca cada auto a rodar periódicamente para mantenerlos activos.</div>
+    </div>
+    <div class="fact-point">
+      <div class="fact-dot"></div>
+      <div class="fact-text"><strong>Seinfeld tiene un Porsche de Le Mans filmado.</strong> Su Porsche 917K de 1969 en librea Gulf fue el mismo que apareció en la película "Le Mans" (1971), conducido por Steve McQueen. Vale aproximadamente 25 millones de dólares.</div>
+    </div>
+    <div class="fact-point">
+      <div class="fact-dot"></div>
+      <div class="fact-text"><strong>El palacio del Sultán vale $1,400 millones.</strong> El Istana Nurul Iman en Brunéi — donde vive — es el palacio residencial más grande del mundo: 2 millones de pies cuadrados, 1,700 habitaciones y baños en oro de 22 quilates.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">AUTO<span>LEGADO</span> · MUNDO</div>
+  <div class="footer-copy">Basado en Guinness World Records, Spear's WMS, Fox News & fuentes especializadas · 2025</div>
+</footer>
+
+<script>
+  // Animate bars on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const fills = entry.target.querySelectorAll('.bar-fill[data-width]');
+        fills.forEach((fill, i) => {
+          setTimeout(() => {
+            fill.style.width = fill.dataset.width;
+          }, i * 120);
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.chart-section').forEach(el => observer.observe(el));
+
+  // Smooth scroll for nav
+  document.querySelectorAll('nav a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
